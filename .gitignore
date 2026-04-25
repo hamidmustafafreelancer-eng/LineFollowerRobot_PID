@@ -1,0 +1,7 @@
+# Ignore compiled outputs
+*.obj
+*.hex
+*.exe
+*.o
+*.mcl
+*.p_c
