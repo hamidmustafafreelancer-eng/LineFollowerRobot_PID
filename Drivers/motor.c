@@ -32,7 +32,7 @@ void Motor_SetDirection(unsigned char leftDir, unsigned char rightDir) {
 }
 
 
-void Motor_SetSpeed(short int   leftSpeed, short int rightSpeed){
+void Motor_SetSpeed(short int   leftDuty, short int rightDuty){
     // left motor speed control
     PWM1_Set_Duty(leftDuty);
     //right motor speed control
