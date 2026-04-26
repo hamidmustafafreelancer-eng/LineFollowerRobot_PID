@@ -13,7 +13,7 @@
 #define IR_SENSOR_2     RA1_bit
 #define IR_SENSOR_3     RA2_bit
 #define IR_SENSOR_4     RA3_bit
-#define IR_SENSOR_5     RA4_bit
+#define IR_SENSOR_5     RA5_bit  // Use RA5, avoid RA4 which is often used for other purposes (like ADC or I/O)
 // Note: We use RA0, RA1, RA2, RA3, RA4 for IR sensors, so bits 0-4 of PORTA are used for IR input
 
 // Motors Direction (PORTB)
