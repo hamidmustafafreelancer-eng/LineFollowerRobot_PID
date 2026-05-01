@@ -14,13 +14,15 @@
 extern "C" {
 #endif
 
+#define KP      10.0
+#define KI      0.005
+#define KD      10.0
+
+#define OUTPUT_CLAMP_POSITIVE   1024.0
+#define OUTPUT_CLAMP_NEGATIVE   -1024.0
+#define LOW_PASS_CUTOFF_FREQ    0.1
+
     typedef struct {
-        double Kp;
-        double Ki;
-        double Kd;
-        double output_clamp_pos;
-        double output_clamp_neg;
-        double low_pass_cutoff_freq;
         double integral_sum;
         double derivative_state;
         double output;
@@ -31,7 +33,7 @@ extern "C" {
      * @brief Initialize PID object
      * @param pid - pointer to PID object
      */
-    void pid_init(pid_t *pid);
+    void PID_Init(pid_t *pid);
     
     /**
      * @brief Iterates one cycle and returns PID output
@@ -39,7 +41,7 @@ extern "C" {
      * @param error - error in the system
      * @return PID output
      */
-    double pid_update(pid_t *pid, double error);
+    double PID_Update(pid_t *pid, double error);
     
 
 #ifdef	__cplusplus
