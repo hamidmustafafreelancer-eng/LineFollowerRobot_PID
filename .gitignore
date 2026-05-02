@@ -5,3 +5,7 @@
 *.o
 *.mcl
 *.p_c
+Makefile
+/nbproject/
+/build/
+/dist/

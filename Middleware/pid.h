@@ -8,25 +8,27 @@
 #ifndef PID_H
 #define	PID_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
-#define KP      10.0
-#define KI      0.005
-#define KD      10.0
+#define SCALE   100
 
-#define OUTPUT_CLAMP_POSITIVE   1024.0
-#define OUTPUT_CLAMP_NEGATIVE   -1024.0
-#define LOW_PASS_CUTOFF_FREQ    0.1
+#define KP      100    // Scaled by 100
+#define KI      5       // Scaled by 100
+#define KD      100    // Scaled by 100
+
+#define OUTPUT_CLAMP_POSITIVE   1024
+#define OUTPUT_CLAMP_NEGATIVE   -1024
+#define LOW_PASS_TIME_CONST     10
 
     typedef struct {
-        double integral_sum;
-        double derivative_state;
-        double output;
-        double clamped_output;
+        int16_t integral_sum;
+        int16_t derivative_state;
+        int16_t output;
+        int16_t clamped_output;
     } pid_t;
 
     /**
@@ -41,7 +43,7 @@ extern "C" {
      * @param error - error in the system
      * @return PID output
      */
-    double PID_Update(pid_t *pid, double error);
+    void PID_Update(pid_t *pid, int16_t error);
     
 
 #ifdef	__cplusplus
