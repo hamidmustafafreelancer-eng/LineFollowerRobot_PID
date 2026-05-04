@@ -1,86 +1,48 @@
-#include <stdint.h>
 #include "pid.h"
 
-static int16_t PID_Derivative(pid_t* pid, int16_t error);
-static int16_t PID_Integral(pid_t* pid, int16_t error);
-static int16_t PID_Clamped_Output(pid_t *pid);
+void PID_Init(pid_t *pid, int16_t p, int16_t i, int16_t d) {
+    pid->kp = p;
+    pid->ki = i;
+    pid->kd = d;
+    PID_Reset(pid);
+}
 
-void PID_Init(pid_t *pid)
-{
-    pid->derivative_state = 0;
+void PID_Reset(pid_t *pid) {
     pid->integral_sum = 0;
+    pid->last_error = 0;
     pid->output = 0;
-    pid->clamped_output = 0;
 }
 
-void PID_Update(pid_t* pid, int16_t error)
-{
-    // Calculate D component
-    int16_t D = PID_Derivative(pid, error * KD);
-    
-    // Calculate I component
-    int16_t I = PID_Integral(pid, error * KI);
-    
-    // Calculate P component
-    int16_t P = error * KP;
-    
-    // Calculate PID output
-    pid->output = (int16_t)(((int32_t)P + (int32_t)I + (int32_t)D) / SCALE);
-    
-    pid->clamped_output = PID_Clamped_Output(pid);
-}
+int16_t PID_Update(pid_t *pid, int16_t error) {
+    int32_t p_term, i_term, d_term;
+    int32_t total_out;
+    int16_t clamped_out;
 
-/**
- * @brief Calculates derivative term with low-pass filter
- * @param pid - Pointer to PID object
- * @param error - System error
- * @return Derivative term
- */
-int16_t PID_Derivative(pid_t *pid, int16_t error)
-{
-    // Combined equation for Derivative & Low-pass filter
-    int16_t D = ((error - pid->derivative_state) / LOW_PASS_TIME_CONST);
-    
-    // Update derivative state
-    pid->derivative_state += D;
+    // 1. Proportional Term
+    p_term = (int32_t)error * pid->kp;
 
-    return D;
-}
-
-/**
- * @brief Calculates integral term
- * @param pid - Pointer to PID object
- * @param error - System error
- * @return Integral term
- */
-int16_t PID_Integral(pid_t *pid, int16_t error)
-{
-    // is system output saturated
-    uint8_t saturated = (pid->output != pid->clamped_output);
-    
-    // are error & output in the same direction
-    uint8_t same_direction = (((int32_t)(pid->output) * (int32_t)error) > 0);
-    
-    if (!(saturated && same_direction))
-    {
+    // 2. Integral Term with Anti-Windup Logic
+    // We only add to the integral if the output isn't already saturated
+    // This prevents the "spinning circle" effect after a sharp turn
+    if (!((pid->output >= PID_MAX && error > 0) || 
+          (pid->output <= PID_MIN && error < 0))) {
         pid->integral_sum += error;
     }
-    
-    return pid->integral_sum;
-}
+    i_term = pid->integral_sum * pid->ki;
 
-/**
- * @brief Returns clamped value of PID output
- * @param pid - Pointer to PID object
- * @return Clamped value of PID output
- */
-int16_t PID_Clamped_Output(pid_t *pid)
-{
-    if (pid->output > OUTPUT_CLAMP_POSITIVE)
-        return OUTPUT_CLAMP_POSITIVE;
-    
-    if (pid->output < OUTPUT_CLAMP_NEGATIVE)
-        return OUTPUT_CLAMP_NEGATIVE;
-    
-    return pid->output;
+    // 3. Derivative Term (Change in Error)
+    // Note: We multiply by KD first to maintain precision before scaling
+    d_term = (int32_t)(error - pid->last_error) * pid->kd;
+    pid->last_error = error;
+
+    // 4. Combine and Scale back down
+    total_out = (p_term + i_term + d_term) / PID_SCALE;
+
+    // 5. Hard Clamping to PWM Limits
+    if (total_out > PID_MAX)  clamped_out = PID_MAX;
+    else if (total_out < PID_MIN) clamped_out = PID_MIN;
+    else clamped_out = (int16_t)total_out;
+
+    pid->output = clamped_out; // Store for the next Anti-Windup check
+    return clamped_out;
 }
