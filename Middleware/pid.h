@@ -10,6 +10,9 @@
 #define PID_MAX     255
 #define PID_MIN    -255
 
+// Lowpass filter time constant
+#define PID_LP_FILTER_TIME_CONSTANT 1
+
 typedef struct {
     // Tuning Gains (Scaled by 100)
     int16_t kp;
@@ -18,7 +21,7 @@ typedef struct {
 
     // State Variables
     int32_t integral_sum;
-    int16_t last_error;
+    int32_t derivative_state;
     
     // Output Storage
     int16_t output;

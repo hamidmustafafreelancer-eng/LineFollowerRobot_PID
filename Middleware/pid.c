@@ -9,7 +9,7 @@ void PID_Init(pid_t *pid, int16_t p, int16_t i, int16_t d) {
 
 void PID_Reset(pid_t *pid) {
     pid->integral_sum = 0;
-    pid->last_error = 0;
+    pid->derivative_state = 0;
     pid->output = 0;
 }
 
@@ -32,8 +32,8 @@ int16_t PID_Update(pid_t *pid, int16_t error) {
 
     // 3. Derivative Term (Change in Error)
     // Note: We multiply by KD first to maintain precision before scaling
-    d_term = (int32_t)(error - pid->last_error) * pid->kd;
-    pid->last_error = error;
+    d_term = (((int32_t)error * pid->kd) - pid->derivative_state) / PID_LP_FILTER_TIME_CONSTANT;
+    pid->derivative_state += d_term;
 
     // 4. Combine and Scale back down
     total_out = (p_term + i_term + d_term) / PID_SCALE;
