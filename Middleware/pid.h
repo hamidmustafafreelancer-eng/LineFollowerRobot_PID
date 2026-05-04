@@ -33,5 +33,4 @@ int16_t PID_Update(pid_t *pid, int16_t error);
 // UML: + Reset()
 void PID_Reset(pid_t *pid);
 
-#endif
--
+#endif // PID_H
