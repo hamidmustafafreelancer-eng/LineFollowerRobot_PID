@@ -19,7 +19,17 @@ Author : Hamid Mustafa
 void LineFollower_Init();
 void LineFollower_RequestCorrection();
 
-// Helper logic
+/*Helper logic
 signed char LineFollower_ReadLineError();
+*/ 
+
 
 #endif
+
+/*
+    note:The Position is mapped in the Driver.
+    The Action (Physical movement) is calculated in the App.
+    The PID is the "Brain" that decides how to correct based on the error.
+    The App is the "Logic" that applies the correction to the motors. 
+        The Driver is the "Senses" that read the line position.
+*/
