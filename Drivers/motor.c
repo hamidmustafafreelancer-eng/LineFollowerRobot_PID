@@ -3,6 +3,8 @@ this file contains functions implementation for motor driver
 Autohor : Hamid Mustafa 
 */
 #include"config/pin_config.h"
+#include "compiler_config.h"
+
 #include"motor.h"
 
 

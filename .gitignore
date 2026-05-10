@@ -10,3 +10,12 @@ Makefile
 /build/
 /dist/
 *.xopp
+# MikroC temporary and output files
+*.cp
+*.mcl
+*.asm
+*.ini
+*.dbg
+*.user
+*.dlt
+*.p_c

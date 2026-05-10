@@ -1,3 +1,5 @@
+#include "compiler_config.h" // Must be first
+
 #include "scheduler.h"
 
 volatile uint8_t task_20ms_count = 0;
