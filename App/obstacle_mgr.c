@@ -41,3 +41,12 @@ void ObstacleManager_Update(void) {
 
 }
 
+
+
+bool ObstacleManager_IsBlocked(void){
+    return is_blocked;
+}
+
+uint8_t ObstacleManager_IsCritical(void){
+    return (distance_cm < 30) ? 1 : 0;
+} // Returns 1 if < 30cm

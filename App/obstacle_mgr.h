@@ -21,5 +21,7 @@ void ObstacleManager_Update(void); // To be called in the loop
 uint8_t ObstacleManager_IsCritical(void); // Returns 1 if < 30cm
 void ObstacleManager_HandleAlerts(void);  // Handles Buzzer logic
 
+bool ObstacleManager_IsBlocked(void); // Returns 1 if < 30cm, used for motor control
+
 #endif
 
