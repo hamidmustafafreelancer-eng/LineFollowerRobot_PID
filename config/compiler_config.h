@@ -12,7 +12,9 @@
         #include <stdio.h>
         #define COMPILER_XC8
         #define _XTAL_FREQ 8000000 // Required for XC8 delays
-
+        #pragma config FOSC = HS
+        #pragma config WDTE = OFF
+        #pragma config LVP = OFF
 
         // --- 1. PWM MACRO MAPPING (MikroC -> XC8) ---
         // MikroC: PWM1_Set_Duty(val)

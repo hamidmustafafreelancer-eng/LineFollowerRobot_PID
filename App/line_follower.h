@@ -5,8 +5,8 @@ Author : Hamid Mustafa
 
 */
 
-#ifndef LINE_FOLLOW_APP_H
-#define LINE_FOLLOW_APP_H
+#ifndef LINE_FOLLOWER_H
+#define LINE_FOLLOWER_H
 
 #include "pid.h"
 

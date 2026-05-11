@@ -1,5 +1,5 @@
 #include "line_follower.h"
-#include "ir_sensor.h"
+#include "ir_sensors.h"
 #include "motor.h"
 #include "pid.h"
 

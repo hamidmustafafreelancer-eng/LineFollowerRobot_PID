@@ -53,9 +53,9 @@ void DisplayManager_Refresh(void) {
         Lcd_Out(2, 9, "cm ");
 
         // Direction Logic (Independent of compiler)
-        if (err > 1)       Lcd_Out(2, 11, "[RGHT]");
-        else if (err < -1) Lcd_Out(2, 11, "[LEFT]");
-        else               Lcd_Out(2, 11, "[CENT]");
+        if (err > 1)       Lcd_Out(2, 11, "RGHT");
+        else if (err < -1) Lcd_Out(2, 11, "LEFT");
+        else               Lcd_Out(2, 11, "[CENT");
         
     // 4. Handle Obstacle Warning Overlay
     if (ObstacleManager_IsBlocked()) {

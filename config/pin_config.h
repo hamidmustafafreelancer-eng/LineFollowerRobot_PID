@@ -15,11 +15,11 @@
 #define IR_PORT         PORTB
 
 #if defined(__XC8) || defined(__XC8__)
-    #define IR_SENSOR_1     PORTB.RB0
-    #define IR_SENSOR_2     PORTB.RB1
-    #define IR_SENSOR_3     PORTB.RB2
-    #define IR_SENSOR_4     PORTB.RB3
-    #define IR_SENSOR_5     PORTB.RB4
+    #define IR_SENSOR_1     PORTBbits.RB0
+    #define IR_SENSOR_2     PORTBbits.RB1
+    #define IR_SENSOR_3     PORTBbits.RB2
+    #define IR_SENSOR_4     PORTBbits.RB3
+    #define IR_SENSOR_5     PORTBbits.RB4
 
     #define IR_MASK         0x1F   // 00011111
 #else
@@ -36,16 +36,21 @@
 #define MOTOR_DIR_TRIS  TRISC
 
 #if defined(__XC8) || defined(__XC8__)
-    #define L_IN1           PORTC.RC3
-    #define L_IN2           PORTC.RC4
+    #define L_IN1_TRIS TRISC3_bit
+    #define L_IN2_TRIS TRISC4_bit
+    #define R_IN3_TRIS TRISC5_bit
+    #define R_IN4_TRIS TRISC6_bit
+    
+    #define L_IN1           PORTCbits.RC3
+    #define L_IN2           PORTCbits.RC4
 
-    #define R_IN3           PORTC.RC5
-    #define R_IN4           PORTC.RC6
+    #define R_IN3           PORTCbits.RC5
+    #define R_IN4           PORTCbits.RC6
 
     //define L_PWM ,define R_PWM          RC2, RC1
     // Left = RC2 (CCP1), Right = RC1 (CCP2)
-    #define L_PWM           PORTC.RC2   // CCP1
-    #define R_PWM           PORTC.RC1   // CCP2
+    #define L_PWM           PORTCbits.RC2   // CCP1
+    #define R_PWM           PORTCbits.RC1   // CCP2
 #else
     #define L_IN1           RC3_bit
     #define L_IN2           RC4_bit
@@ -95,12 +100,12 @@
     #define LCD_D6      PORTDbits.RD6;
     #define LCD_D7      PORTDbits.RD7;
     // LCD TRIS
-    #define LCD_RS_Direction  TRISDbits.TRISD0;
-    #define LCD_EN_Direction  TRISDbits.TRISD1;
-    #define LCD_D4_Direction  TRISDbits.TRISD4;
-    #define LCD_D5_Direction  TRISDbits.TRISD5;
-    #define LCD_D6_Direction  TRISDbits.TRISD6;
-    #define LCD_D7_Direction  TRISDbits.TRISD7;
+    #define LCD_RS_Direction  TRISDbits.TRISD0
+    #define LCD_EN_Direction  TRISDbits.TRISD1
+    #define LCD_D4_Direction  TRISDbits.TRISD4
+    #define LCD_D5_Direction  TRISDbits.TRISD5
+    #define LCD_D6_Direction  TRISDbits.TRISD6
+    #define LCD_D7_Direction  TRISDbits.TRISD7
 #else
     sbit LCD_RS at RD0_bit;
     sbit LCD_EN at RD1_bit;
