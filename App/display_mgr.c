@@ -28,25 +28,35 @@ void DisplayManager_Init(void) {
 }
 
 void DisplayManager_Refresh(void) {
-    char txt[7]; // Buffer for conversion strings
+    char txt[12]; // Buffer for conversion strings
     signed char err = LineFollower_GetLastKnownError();
     uint8_t dist = ObstacleManager_GetDistance();
     
-    // 1. Update Error Value (Position 1, 3)
-    IntToStr(err, txt);
-    Lcd_Out(1, 3, Ltrim(txt)); 
-    Lcd_Out(1, 6, " "); // Eraser for shifting digits
+     // --- Intelligent Conversion ---
+    #ifdef __XC8
+        sprintf(txt, "%d", (int)err);
+    #else
+        IntToStr((int)err, txt);
+    #endif
 
-    // 2. Update Distance (Position 2, 6)
-    ByteToStr(dist, txt);
-    Lcd_Out(2, 6, Ltrim(txt));
-    Lcd_Out(2, 9, "cm "); // Unit and eraser
+    // Lcd_Out now works on both compilers thanks to compiler_config.h
+        Lcd_Out(1, 3, txt); 
+        Lcd_Out(1, 6, " "); 
 
-    // 3. Update Visual Direction (Position 2, 11)
-    if (err > 1)       Lcd_Out(2, 11, "[RGHT]");
-    else if (err < -1) Lcd_Out(2, 11, "[LEFT]");
-    else               Lcd_Out(2, 11, "[CENT]");
-    
+        #ifdef __XC8
+            sprintf(txt, "%d", (int)dist);
+        #else
+            ByteToStr(dist, txt);
+        #endif
+
+        Lcd_Out(2, 6, txt);
+        Lcd_Out(2, 9, "cm ");
+
+        // Direction Logic (Independent of compiler)
+        if (err > 1)       Lcd_Out(2, 11, "[RGHT]");
+        else if (err < -1) Lcd_Out(2, 11, "[LEFT]");
+        else               Lcd_Out(2, 11, "[CENT]");
+        
     // 4. Handle Obstacle Warning Overlay
     if (ObstacleManager_IsBlocked()) {
         Lcd_Out(1, 14, "!!!"); // Small visual alarm

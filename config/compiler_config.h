@@ -36,7 +36,14 @@
         #define TMR0IF_bit          INTCONbits.TMR0IF
         #define TMR0IE_bit          INTCONbits.TMR0IE
         #define GIE_bit             INTCONbits.GIE
-
+    // Use 'static inline' to allow including in multiple files
+        static inline void LCD_Print(char *str) {
+            while(*str) LCD_PrintChar(*str++);
+        }
+        static inline void LCD_Goto(uint8_t row, uint8_t col) {
+            uint8_t pos = (row == 1) ? (0x80 + col - 1) : (0xC0 + col - 1);
+            LCD_Send_Cmd(pos);
+        }
     #else
         #define COMPILER_MIKROC
         // MikroC already has these built-in; no macros needed.
@@ -46,6 +53,4 @@
         #define G_INT_E     GIE_bit
     #endif
 
-
-
-#endif
+    
